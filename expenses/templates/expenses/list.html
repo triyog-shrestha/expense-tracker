@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="{% static 'expenses/style.css' %}">  
+<body>
+    
+
+<h1>Your Personal Expense Tracker</h1> <br><br>
+<form method="POST" action="{% url 'expenses:expense_add' %}">
+    {% csrf_token %}
+    {{ form.title }}
+    {{ form.amount }}
+    {{ form.category }}
+    <button class="btn-submit">Add new expense</button>
+</form><br>
+
+
+<div class="card">
+    <table border="1" >
+        <tr>
+            <th> Expense </th>
+            <th> Amount </th>
+            <th> Category </th>
+            <th> Date </th>
+            <th> Action </th>
+        </tr>
+        {% for i in expenses %}
+        <tr>
+            <td><p>{{ i.title }}</p></td>
+            <td><p>Rs.{{ i.amount }}</p></td>
+            <td><p>{{ i.category }}</p></td>
+            <td><p>{{ i.date }}</p></td>
+            <td>
+                <form action="{% url 'expenses:delete_expense' i.pk%}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete"> Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <h1> Your total expense : {{ total }}</h1>
+
+
+    </body>
+</html>
